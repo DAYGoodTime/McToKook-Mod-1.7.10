@@ -1,0 +1,21 @@
+{
+	"modListVersion": 2,
+	"modList": [{
+		"modid": "${modId}",
+		"name": "${modName}",
+		"description": "这是一个可以让MC的聊天与指定的一个Kook服务器的频道互通的mcmod 版本: 1.7.10",
+		"version": "${modVersion}",
+		"mcversion": "${minecraftVersion}",
+		"url": "https://github.com/DAYGoodTime/McToKook-Mod-1.7.10",
+		"updateUrl": "",
+		"authorList": ["xiaoACE","DAY_Time"],
+		"credits": "",
+		"logoFile": "",
+		"screenshots": [],
+		"parent": "",
+		"requiredMods": [],
+		"dependencies": [],
+		"dependants": [],
+		"useDependencyInformation": true
+	}]
+}
