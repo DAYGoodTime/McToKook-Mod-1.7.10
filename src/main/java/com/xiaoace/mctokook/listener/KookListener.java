@@ -2,6 +2,8 @@ package com.xiaoace.mctokook.listener;
 
 import static com.xiaoace.mctokook.utils.MinecraftTextConverter.convertToMinecraftFormat;
 
+import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.StrUtil;
 import net.minecraft.util.ChatComponentText;
 
 import com.xiaoace.mctokook.Config;
@@ -15,6 +17,9 @@ import snw.jkook.event.channel.ChannelMessageEvent;
 import snw.jkook.message.TextChannelMessage;
 import snw.jkook.message.component.BaseComponent;
 import snw.jkook.message.component.TextComponent;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class KookListener implements Listener {
 
@@ -45,6 +50,11 @@ public class KookListener implements Listener {
             // Kook消息发送者
             kookUser = channelMessageEvent.getMessage()
                 .getSender();
+            //判断是否是机器人消息
+            if(kookUser.isBot()){
+                return;
+            }
+
             kookMessage = channelMessageEvent.getMessage();
 
             String kookUserNickName = kookUser.getNickName(
@@ -68,9 +78,16 @@ public class KookListener implements Listener {
                 McToKook.LOG.info("来自KOOK的消息: " + textComponent);
 
                 String needFormatMessage = Config.to_Minecraft_Message;
-                // TODO format issue with '$'
-                String formattedMessage = needFormatMessage.replaceAll("\\{nickName}", kookUserNickName)
-                    .replaceAll("\\{message}", convertToMinecraftFormat(component.toString()));
+                //[Done]TODO format issue with '$'
+                Map<String,String> formatMap = MapUtil.builder(new HashMap<String,String>())
+                    .put("nickName",kookUserNickName)
+                    .put("message",convertToMinecraftFormat(component.toString()))
+                        .map();
+                String formattedMessage = StrUtil.format(needFormatMessage,formatMap);
+
+
+//                String formattedMessage = needFormatMessage.replaceAll("\\{nickName}", kookUserNickName)
+//                    .replaceAll("\\{message}", convertToMinecraftFormat(component.toString()));
 
                 FMLCommonHandler.instance()
                     .getMinecraftServerInstance()
