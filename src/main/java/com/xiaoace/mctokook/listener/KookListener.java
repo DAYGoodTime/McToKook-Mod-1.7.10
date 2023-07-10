@@ -78,7 +78,6 @@ public class KookListener implements Listener {
                 McToKook.LOG.info("来自KOOK的消息: " + textComponent);
 
                 String needFormatMessage = Config.to_Minecraft_Message;
-                //[Done]TODO format issue with '$'
                 Map<String,String> formatMap = MapUtil.builder(new HashMap<String,String>())
                     .put("nickName",kookUserNickName)
                     .put("message",convertToMinecraftFormat(component.toString()))
