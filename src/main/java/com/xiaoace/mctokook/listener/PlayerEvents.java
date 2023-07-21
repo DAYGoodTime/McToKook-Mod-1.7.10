@@ -1,13 +1,8 @@
 package com.xiaoace.mctokook.listener;
 
-import static com.xiaoace.mctokook.utils.PlayerIcon.getPlayerIconUr;
-
-import java.util.concurrent.CompletableFuture;
-
+import cn.hutool.core.map.MapUtil;
 import com.xiaoace.mctokook.Config;
 import com.xiaoace.mctokook.McToKook;
-
-import cn.hutool.core.map.MapUtil;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import snw.jkook.entity.abilities.Accessory;
@@ -20,6 +15,10 @@ import snw.jkook.message.component.card.Theme;
 import snw.jkook.message.component.card.element.ImageElement;
 import snw.jkook.message.component.card.element.MarkdownElement;
 import snw.jkook.message.component.card.module.SectionModule;
+
+import java.util.concurrent.CompletableFuture;
+
+import static com.xiaoace.mctokook.utils.PlayerIcon.getPlayerIconUr;
 
 public class PlayerEvents {
 

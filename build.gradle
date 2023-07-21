@@ -29,7 +29,6 @@ import java.util.concurrent.TimeUnit
 buildscript {
     repositories {
         mavenCentral()
-
         maven {
             name 'forge'
             url 'https://maven.minecraftforge.net'
@@ -50,6 +49,7 @@ buildscript {
         }
 
         mavenLocal()
+
     }
 }
 plugins {
@@ -536,6 +536,10 @@ repositories {
         content {
             includeGroup "org.lwjgl"
         }
+    }
+    maven {
+        name 'jit'
+        url 'https://jitpack.io'
     }
     if (includeWellKnownRepositories.toBoolean()) {
         maven {
