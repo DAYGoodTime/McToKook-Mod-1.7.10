@@ -90,9 +90,10 @@ public class PlayerEvents {
         formattedMessage.append(needFormatMessage.replaceAll("\\{playerName}", playerName));
         if (isQuited) {
             Long loginTime = MapUtil.getLong(McToKook.playerOnlineTime, playerUUID, 0L);
-            if (!loginTime.equals(0L)) {
+            long playingTime = (System.currentTimeMillis() - loginTime) / 60000;
+            if (playingTime>0) {
                 formattedMessage.append(" 游玩时长:")
-                    .append((System.currentTimeMillis() - loginTime) / 60000)
+                    .append(playingTime)
                     .append("分钟");
                 McToKook.playerOnlineTime.remove(playerUUID);
             }
