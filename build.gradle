@@ -893,12 +893,12 @@ tasks.named("jar", Jar).configure {
     }
 }
 
+
 if (usesShadowedDependencies.toBoolean()) {
     tasks.named("shadowJar", ShadowJar).configure {
         manifest {
             attributes(getManifestAttributes())
         }
-
         if (minimizeShadowedDependencies.toBoolean()) {
             minimize()  // This will only allow shading for actually used classes
         }
@@ -912,11 +912,8 @@ if (usesShadowedDependencies.toBoolean()) {
             relocationPrefix = modGroup + ".shadow"
             enableRelocation = true
         }
-        relocate('snw.kookbc','com.xiaoace.snw.kookbc')
-        relocate('com.google.gson','com.xiaoace.com.google.gson')
-        relocate('org.yaml.snakeyaml', 'com.xiaoace.org.yaml.snakeyaml')
-        relocate('org.spongepowered', 'com.xiaoace.org.spongepowered')
     }
+
     configurations.runtimeElements.outgoing.artifacts.clear()
     configurations.apiElements.outgoing.artifacts.clear()
     configurations.runtimeElements.outgoing.artifact(tasks.named("shadowJar", ShadowJar))

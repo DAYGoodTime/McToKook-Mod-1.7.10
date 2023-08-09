@@ -44,6 +44,7 @@ public class CommonProxy {
 
         YamlConfiguration config = new YamlConfiguration();
 
+        config.set("mode", "websocket");
         CoreImpl core = new CoreImpl();
         JKook.setCore(core);
 

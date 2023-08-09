@@ -1,10 +1,22 @@
-package com.xiaoace.mctokook.listener;
+package com.xiaoace.mctokook.minixs;
 
-import cn.hutool.core.map.MapUtil;
+import java.util.concurrent.CompletableFuture;
+
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.management.ServerConfigurationManager;
+
+import org.apache.logging.log4j.Logger;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 import com.xiaoace.mctokook.Config;
 import com.xiaoace.mctokook.McToKook;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
+import com.xiaoace.mctokook.utils.PlayerIcon;
+
+import cn.hutool.core.map.MapUtil;
 import snw.jkook.entity.abilities.Accessory;
 import snw.jkook.entity.channel.Channel;
 import snw.jkook.entity.channel.TextChannel;
@@ -16,22 +28,22 @@ import snw.jkook.message.component.card.element.ImageElement;
 import snw.jkook.message.component.card.element.MarkdownElement;
 import snw.jkook.message.component.card.module.SectionModule;
 
-import java.util.concurrent.CompletableFuture;
+@Mixin(value = ServerConfigurationManager.class)
+public class PlayerJoinServerMixinEvent {
 
-import static com.xiaoace.mctokook.utils.PlayerIcon.getPlayerIconUr;
+    @Unique
+    private static final Logger mcToKook_Mod_1_7_10$LOG = McToKook.LOG;
 
-public class PlayerEvents {
-
-    @SubscribeEvent
-    public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent loggedInEvent) {
-
+    @Inject(method = "playerLoggedIn", at = @At("RETURN"))
+    public void AfterPlayerJoined(EntityPlayerMP player, CallbackInfo ci) {
+        mcToKook_Mod_1_7_10$LOG.info("[mixin]玩家:" + player.getDisplayName() + "进入了服务器");
         if (!Config.join_Message) {
             return;
         }
         CompletableFuture.runAsync(() -> {
 
-            String playerName = loggedInEvent.player.getDisplayName();
-            String playerUUID = loggedInEvent.player.getGameProfile()
+            String playerName = player.getDisplayName();
+            String playerUUID = player.getGameProfile()
                 .getId()
                 .toString();
 
@@ -47,20 +59,19 @@ public class PlayerEvents {
                 textChannel.sendComponent(buildCard(playerName, playerUUID, false));
             }
         });
-
     }
 
-    @SubscribeEvent
-    public void onPlayerQuit(PlayerEvent.PlayerLoggedOutEvent loggedOutEvent) {
-
+    @Inject(method = "playerLoggedOut", at = @At("RETURN"))
+    public void AfterPlayerLeave(EntityPlayerMP player, CallbackInfo ci) {
+        mcToKook_Mod_1_7_10$LOG.info("[mixin]玩家:" + player.getDisplayName() + "离开了服务器");
         if (!Config.quit_Message) {
             return;
         }
 
         CompletableFuture.runAsync(() -> {
 
-            String playerName = loggedOutEvent.player.getDisplayName();
-            String playerUUID = loggedOutEvent.player.getGameProfile()
+            String playerName = player.getDisplayName();
+            String playerUUID = player.getGameProfile()
                 .getId()
                 .toString();
 
@@ -75,9 +86,10 @@ public class PlayerEvents {
         });
     }
 
+    @Unique
     private static MultipleCardComponent buildCard(String playerName, String playerUUID, boolean isQuited) {
         String needFormatMessage = Config.player_Join_Message;
-        String imageUrl = getPlayerIconUr(playerUUID);
+        String imageUrl = PlayerIcon.getPlayerIconUr(playerUUID);
         CardBuilder cardBuilder = new CardBuilder();
         cardBuilder.setTheme(Theme.SUCCESS)
             .setSize(Size.LG);
@@ -89,9 +101,10 @@ public class PlayerEvents {
         formattedMessage.append(needFormatMessage.replaceAll("\\{playerName}", playerName));
         if (isQuited) {
             Long loginTime = MapUtil.getLong(McToKook.playerOnlineTime, playerUUID, 0L);
-            if (!loginTime.equals(0L)) {
+            long playingTime = (System.currentTimeMillis() - loginTime) / 60000;
+            if (playingTime > 0) {
                 formattedMessage.append(" 游玩时长:")
-                    .append((System.currentTimeMillis() - loginTime) / 60000)
+                    .append(playingTime)
                     .append("分钟");
                 McToKook.playerOnlineTime.remove(playerUUID);
             }
@@ -103,4 +116,5 @@ public class PlayerEvents {
                 Accessory.Mode.LEFT));
         return cardBuilder.build();
     }
+
 }

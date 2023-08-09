@@ -10,9 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.xiaoace.mctokook.listener.OnPlayerMessage;
-import com.xiaoace.mctokook.listener.PlayerEvents;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -22,6 +20,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import snw.kookbc.impl.KBCClient;
+// import snw.kookbc.impl.KBCClient;
 
 @Mod(
     modid = Tags.MODID,
@@ -50,9 +49,6 @@ public class McToKook {
     @Mod.EventHandler
     // load "Do your mod setup. Build whatever data structures you care about. Register recipes." (Remove if not needed)
     public void init(FMLInitializationEvent event) {
-        FMLCommonHandler.instance()
-            .bus()
-            .register(new PlayerEvents());
         MinecraftForge.EVENT_BUS.register(new OnPlayerMessage());
         proxy.init(event, this);
     }
@@ -79,11 +75,6 @@ public class McToKook {
     public void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event) {
         EntityPlayer player = event.player;
         player.addChatComponentMessage(new ChatComponentText("再见！"));
-    }
-
-    // 提供一个get KookBC的方法
-    public static KBCClient getKbcClient() {
-        return kbcClient;
     }
 
 }

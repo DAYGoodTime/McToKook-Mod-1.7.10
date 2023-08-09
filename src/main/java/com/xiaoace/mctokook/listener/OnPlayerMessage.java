@@ -31,7 +31,7 @@ public class OnPlayerMessage {
 
             String needFormatMessage = Config.to_Kook_Message;
             Map<String, String> formatMap = MapUtil.builder(new HashMap<String, String>())
-                .put("nickName", playerName)
+                .put("playerName", playerName)
                 .put("message", message)
                 .map();
             Channel channel = McToKook.kbcClient.getCore()
