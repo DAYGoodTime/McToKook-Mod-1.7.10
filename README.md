@@ -36,3 +36,8 @@
 感谢[GTNH团队](https://github.com/GTNewHorizons)的[1.7.10Mod开发模板](https://github.com/GTNewHorizons/ExampleMod1.7.10)
 ## 最后
 还有什么问题、想法或建议，请直接与我联系，或者直接在github上开一个issues。
+## 该分支的私货[minix]
+监听时间改成 Minix了 需要用Gtnh的uniminix才可以运行
+添加了在Kook端添加了 `/单子` 和 `/下单` 命令 需要 搭配[OCRemoteServer](https://github.com/DAYGoodTime/OCRemote)运行。
+
+

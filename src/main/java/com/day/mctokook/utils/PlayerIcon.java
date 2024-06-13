@@ -1,4 +1,4 @@
-package com.xiaoace.mctokook.utils;
+package com.day.mctokook.utils;
 
 import cn.hutool.core.net.url.UrlBuilder;
 

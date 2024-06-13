@@ -1,4 +1,4 @@
-package com.xiaoace.mctokook.minixs;
+package com.day.mctokook.minixs;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -12,11 +12,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.xiaoace.mctokook.Config;
-import com.xiaoace.mctokook.McToKook;
-import com.xiaoace.mctokook.utils.PlayerIcon;
+import com.day.mctokook.Config;
+import com.day.mctokook.McToKook;
+import com.day.mctokook.utils.PlayerIcon;
 
-import cn.hutool.core.map.MapUtil;
 import snw.jkook.entity.abilities.Accessory;
 import snw.jkook.entity.channel.Channel;
 import snw.jkook.entity.channel.TextChannel;
@@ -100,7 +99,10 @@ public class PlayerJoinServerMixinEvent {
         StringBuilder formattedMessage = new StringBuilder();
         formattedMessage.append(needFormatMessage.replaceAll("\\{playerName}", playerName));
         if (isQuited) {
-            Long loginTime = MapUtil.getLong(McToKook.playerOnlineTime, playerUUID, 0L);
+            long loginTime = 0L;
+            if (McToKook.playerOnlineTime.containsKey(playerUUID)) {
+                loginTime = McToKook.playerOnlineTime.get(playerUUID);
+            }
             long playingTime = (System.currentTimeMillis() - loginTime) / 60000;
             if (playingTime > 0) {
                 formattedMessage.append(" 游玩时长:")

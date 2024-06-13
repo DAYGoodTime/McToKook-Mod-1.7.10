@@ -1,4 +1,4 @@
-package com.xiaoace.mctokook.utils;
+package com.day.mctokook.utils;
 
 public class MinecraftTextConverter {
 

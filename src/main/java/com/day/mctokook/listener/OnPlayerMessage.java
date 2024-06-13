@@ -1,4 +1,4 @@
-package com.xiaoace.mctokook.listener;
+package com.day.mctokook.listener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,8 +6,8 @@ import java.util.concurrent.CompletableFuture;
 
 import net.minecraftforge.event.ServerChatEvent;
 
-import com.xiaoace.mctokook.Config;
-import com.xiaoace.mctokook.McToKook;
+import com.day.mctokook.Config;
+import com.day.mctokook.McToKook;
 
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;

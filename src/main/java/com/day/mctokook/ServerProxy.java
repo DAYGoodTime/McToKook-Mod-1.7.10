@@ -1,4 +1,4 @@
-package com.xiaoace.mctokook;
+package com.day.mctokook;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -6,21 +6,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
-import com.xiaoace.mctokook.commands.KookCommands;
-import com.xiaoace.mctokook.listener.KookListener;
+import com.day.mctokook.commands.KookCommands;
+import com.day.mctokook.listener.KookListener;
 
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import snw.jkook.JKook;
+import snw.jkook.command.CommandManager;
 import snw.jkook.config.file.YamlConfiguration;
 import snw.jkook.entity.channel.TextChannel;
 import snw.kookbc.impl.CoreImpl;
 import snw.kookbc.impl.KBCClient;
+import snw.kookbc.impl.plugin.InternalPlugin;
 
-public class CommonProxy {
+public class ServerProxy extends CommonProxy {
 
     // 让xiaoACE emo的 emoji
     // private EmojiHandler emojiHandler;
@@ -35,7 +35,6 @@ public class CommonProxy {
         McToKook.LOG.info(Config.configList());
         McToKook.LOG.info("Hello Forge! Here is McToKooK 1710");
         // emojiHandler = new EmojiHandler(this);
-
         if (!configFolder.exists()) {
             configFolder.mkdir();
         }
@@ -77,17 +76,14 @@ public class CommonProxy {
             .getEventManager()
             .registerHandlers(McToKook.kbcClient.getInternalPlugin(), new KookListener(modInstance));
         // 注册KOOK指令
-        McToKook.kbcClient.getCore()
-            .getCommandManager()
-            .registerCommand(McToKook.kbcClient.getInternalPlugin(), new KookCommands().list);
-    }
-
-    // load "Do your mod setup. Build whatever data structures you care about. Register recipes." (Remove if not needed)
-    public void init(FMLInitializationEvent event, McToKook modInstance) {}
-
-    // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
-    public void postInit(FMLPostInitializationEvent event, McToKook modInstance) {
-
+        CommandManager commandManager = McToKook.kbcClient.getCore()
+            .getCommandManager();
+        InternalPlugin plugin = McToKook.kbcClient.getInternalPlugin();
+        KookCommands commands = new KookCommands();
+        commandManager.registerCommand(plugin, commands.list);
+        commandManager.registerCommand(plugin, commands.info);
+        commandManager.registerCommand(plugin, commands.order);
+        // ClientCommandHandler.instance.registerCommand(new SetProxyCommand());
     }
 
     // register server commands in this event handler (Remove if not needed)
@@ -127,8 +123,4 @@ public class CommonProxy {
             e.printStackTrace();
         }
     }
-
-    // public EmojiHandler getEmojiHandler() {
-    // return emojiHandler;
-    // }
 }

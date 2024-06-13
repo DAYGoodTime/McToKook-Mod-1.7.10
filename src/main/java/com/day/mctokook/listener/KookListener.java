@@ -1,14 +1,14 @@
-package com.xiaoace.mctokook.listener;
+package com.day.mctokook.listener;
 
-import static com.xiaoace.mctokook.utils.MinecraftTextConverter.convertToMinecraftFormat;
+import static com.day.mctokook.utils.MinecraftTextConverter.convertToMinecraftFormat;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.util.ChatComponentText;
 
-import com.xiaoace.mctokook.Config;
-import com.xiaoace.mctokook.McToKook;
+import com.day.mctokook.Config;
+import com.day.mctokook.McToKook;
 
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;

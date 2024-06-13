@@ -1,15 +1,13 @@
-package com.xiaoace.mctokook;
+package com.day.mctokook;
 
 import java.util.Map;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.xiaoace.mctokook.listener.OnPlayerMessage;
+import com.day.mctokook.listener.OnPlayerMessage;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -17,26 +15,28 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
 import snw.kookbc.impl.KBCClient;
 // import snw.kookbc.impl.KBCClient;
 
 @Mod(
-    modid = Tags.MODID,
-    version = Tags.VERSION,
-    name = Tags.MODNAME,
+    modid = McToKook.MODID,
+    version = McToKook.Version,
+    name = McToKook.MODNAME,
     acceptedMinecraftVersions = "[1.7.10]",
     acceptableRemoteVersions = "*")
 public class McToKook {
 
-    public static final Logger LOG = LogManager.getLogger(Tags.MODID);
+    public static final String MODID = "mctokook";
+    public static final String MODNAME = "McToKook";
+    public static final String Version = "1.4.0a-minix";
+
+    public static final Logger LOG = LogManager.getLogger(McToKook.MODID);
 
     public static KBCClient kbcClient = null;
 
     public static Map<String, Long> playerOnlineTime;
 
-    @SidedProxy(clientSide = "com.xiaoace.mctokook.ClientProxy", serverSide = "com.xiaoace.mctokook.CommonProxy")
+    @SidedProxy(clientSide = "com.day.mctokook.ClientProxy", serverSide = "com.day.mctokook.ServerProxy")
     public static CommonProxy proxy;
 
     @Mod.EventHandler
@@ -50,31 +50,19 @@ public class McToKook {
     // load "Do your mod setup. Build whatever data structures you care about. Register recipes." (Remove if not needed)
     public void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new OnPlayerMessage());
-        proxy.init(event, this);
+        proxy.init(event);
     }
 
     @Mod.EventHandler
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
     public void postInit(FMLPostInitializationEvent event) {
-        proxy.postInit(event, this);
+        proxy.postInit(event);
     }
 
     @Mod.EventHandler
     // register server commands in this event handler (Remove if not needed)
     public void serverStarting(FMLServerStartingEvent event) {
         proxy.serverStarting(event);
-    }
-
-    @SubscribeEvent
-    public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        EntityPlayer player = event.player;
-        player.addChatComponentMessage(new ChatComponentText("欢迎进入世界！"));
-    }
-
-    @SubscribeEvent
-    public void onPlayerLeave(PlayerEvent.PlayerLoggedOutEvent event) {
-        EntityPlayer player = event.player;
-        player.addChatComponentMessage(new ChatComponentText("再见！"));
     }
 
 }

@@ -1,4 +1,4 @@
-package com.xiaoace.mctokook;
+package com.day.mctokook;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -21,6 +21,11 @@ public class Config {
 
     public static String player_Quit_Message = "肝帝{playerName}歇逼了";
 
+    public static String CPU_INFO_API = "http://localhost:125/api/ae/cpu/infos";
+    public static String CPU_TASK_API = "http://localhost:125/api/ae/cpu/info/";
+    public static String ITEM_API = "http://localhost:125/api/ae/item/";
+    public static String AE_ORDER_ITEM_API = "http://localhost:125/api/ae/order/";
+
     public static Boolean to_Minecraft = true;
 
     public static Boolean to_Kook = true;
@@ -30,6 +35,8 @@ public class Config {
     public static Boolean quit_Message = true;
 
     public static Boolean record_player_time = true;
+
+    public static Integer proxy_port = 8080;
 
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
@@ -73,13 +80,19 @@ public class Config {
             Configuration.CATEGORY_GENERAL,
             record_player_time,
             "是否记录每位玩家的游玩时间,默认true");
+        proxy_port = configuration
+            .getInt("proxy_port", Configuration.CATEGORY_GENERAL, proxy_port, -1, 25565, "mojang认证服务器代理端口,为-1则不启用代理");
+        CPU_INFO_API = configuration
+            .getString("CPU_INFO_API", Configuration.CATEGORY_GENERAL, CPU_INFO_API, "自义定获取CPU信息API地址");
+        CPU_TASK_API = configuration
+            .getString("CPU_TASK_API", Configuration.CATEGORY_GENERAL, CPU_TASK_API, "自义定获取CPU TASK API地址");
         if (configuration.hasChanged()) {
             configuration.save();
         }
     }
 
     // only for DEV
-    public static String configList() {
+    protected static String configList() {
         Class<Config> cfg = Config.class;
         return Arrays.stream(cfg.getDeclaredFields())
             .map(Field::getName)
