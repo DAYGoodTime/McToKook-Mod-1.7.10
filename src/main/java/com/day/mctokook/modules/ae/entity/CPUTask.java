@@ -1,4 +1,4 @@
-package com.day.mctokook.models.ae.entity;
+package com.day.mctokook.modules.ae.entity;
 
 import java.util.List;
 

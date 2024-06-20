@@ -1,4 +1,4 @@
-package com.day.mctokook.models.ae.entity;
+package com.day.mctokook.modules.ae.entity;
 
 public class AEItem {
 
@@ -12,4 +12,5 @@ public class AEItem {
     // private String tag;//Tag,错误编码
     public Boolean isCraftable;// 是否可合成
     public Long maxSize;// 物品最大堆叠数量(属实有点幽默的属性)
+    public String labelImage; // 脱敏物品名(图片地址)
 }

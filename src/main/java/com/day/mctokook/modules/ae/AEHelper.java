@@ -1,12 +1,12 @@
-package com.day.mctokook.models.ae;
+package com.day.mctokook.modules.ae;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.day.mctokook.Config;
-import com.day.mctokook.models.ae.entity.CPUInfo;
-import com.day.mctokook.models.ae.entity.CPUInfoResponse;
+import com.day.mctokook.modules.ae.entity.CPUInfo;
+import com.day.mctokook.modules.ae.entity.CPUInfoResponse;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
@@ -21,11 +21,14 @@ public class AEHelper {
 
     public static boolean OrderItem(String item, int meta, int count) {
         String response = HttpUtil.get(StrUtil.format(Config.AE_ORDER_ITEM_API + "{}/{}/{}", count, meta, item));
+        if (response == null) return false;
         return Boolean.parseBoolean(response);
     }
 
     public static CPUInfoResponse getBusyCPUs() {
-        return JSONUtil.toBean(HttpUtil.get(Config.CPU_INFO_API), CPUInfoResponse.class);
+        String response = HttpUtil.get(Config.CPU_INFO_API);
+        if (response == null) return null;
+        return JSONUtil.toBean(response, CPUInfoResponse.class);
     }
 
     public static void handleCPUTask() {

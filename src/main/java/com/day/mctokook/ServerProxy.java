@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
-import com.day.mctokook.commands.KookCommands;
+import com.day.mctokook.commands.kook.KookCommands;
 import com.day.mctokook.listener.KookListener;
 
 import cpw.mods.fml.common.FMLCommonHandler;
