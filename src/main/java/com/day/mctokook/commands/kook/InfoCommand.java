@@ -46,12 +46,14 @@ import snw.jkook.message.component.card.module.DividerModule;
 import snw.jkook.message.component.card.module.HeaderModule;
 import snw.jkook.message.component.card.module.SectionModule;
 import snw.kookbc.impl.network.exceptions.BadResponseException;
+import snw.kookbc.util.GsonUtil;
 
 public class InfoCommand implements UserCommandExecutor {
 
     @Override
     public void onCommand(User user, Object[] arguments, @Nullable Message message) {
         MultipleCardComponent card = null;
+        CardBuilder builder = new CardBuilder().setTheme(Theme.INFO);
         try {
             if (message == null) return;
             CPUInfoResponse info = AEHelper.getBusyCPUs();
@@ -63,8 +65,7 @@ public class InfoCommand implements UserCommandExecutor {
                 .getHttpAPI()
                 .getChannel(Config.channel_ID);
             if (!(channel instanceof TextChannel)) return;
-            CardBuilder builder = new CardBuilder().setTheme(Theme.INFO)
-                .setSize(Size.LG)
+            builder.setSize(Size.LG)
                 .addModule(new HeaderModule(new PlainTextElement("单子情况: ")))
                 .addModule(DividerModule.INSTANCE)
                 .addModule(
@@ -79,9 +80,10 @@ public class InfoCommand implements UserCommandExecutor {
                         Accessory.Mode.LEFT))
                 .addModule(DividerModule.INSTANCE)
                 .addModule(new HeaderModule(new PlainTextElement("正在合成的物品: ")));
-            List<CPUInfo> busy = info.infos.stream()
+
+            List<CPUInfo> busy = info.infos != null ? info.infos.stream()
                 .filter(cpu -> cpu.busy)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()) : new ArrayList<>();
             List<String> images = new ArrayList<>();
             List<AEItem> items = new ArrayList<>();
             for (CPUInfo cpuInfo : busy) {
@@ -107,13 +109,13 @@ public class InfoCommand implements UserCommandExecutor {
                 byte[] LabelImageByte = renderText(name);
                 item.labelImage = McToKook.kbcClient.getCore()
                     .getHttpAPI()
-                    .uploadFile(item.label, LabelImageByte);
+                    .uploadFile(String.valueOf(Math.random()), LabelImageByte);
                 items.add(item);
             }
             for (int i = 0; i < images.size(); i++) {
                 AEItem item = items.get(i);
-                ImageElement image = new ImageElement(images.get(i), item.label, Size.SM, false);
-                ImageElement ItemLabel = new ImageElement(item.labelImage, item.label, Size.SM, false);
+                ImageElement image = new ImageElement(images.get(i), null, Size.SM, false);
+                ImageElement ItemLabel = new ImageElement(item.labelImage, null, Size.SM, false);
                 // builder.addModule(
                 // new SectionModule(
                 // new MarkdownElement(
@@ -136,10 +138,17 @@ public class InfoCommand implements UserCommandExecutor {
         } catch (BadResponseException e) {
             message.reply("KOOK消息异常:" + e.getLocalizedMessage());
             if (card != null) {
-                McToKook.LOG.warn(card.toString());
+                McToKook.LOG.warn("卡片实体类信息:{}", card);
+                McToKook.LOG.warn(
+                    "卡片JSON:{}",
+                    GsonUtil.CARD_GSON.toJson(snw.kookbc.impl.entity.builder.CardBuilder.serialize(card)));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            message.reply("插件处理图片失败:" + e.getLocalizedMessage());
+            McToKook.LOG.error("处理图片失败:{}", e.getLocalizedMessage(), e);
+        } catch (Throwable e) {
+            message.reply("插件出现意外错误:" + e.getLocalizedMessage());
+            McToKook.LOG.error("内部错误:{}", e.getLocalizedMessage(), e);
         }
     }
 
