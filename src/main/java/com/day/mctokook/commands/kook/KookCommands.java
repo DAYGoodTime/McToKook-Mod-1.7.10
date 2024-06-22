@@ -7,6 +7,8 @@ public class KookCommands {
     public final JKookCommand list;
     public final JKookCommand order;
     public final JKookCommand info;
+    public final JKookCommand dict;
+    public final JKookCommand dict_upload;
 
     public KookCommands() {
         list = new JKookCommand("list", "/").setDescription("用法: /list ; 作用: 返回当前服务器内的玩家列表")
@@ -21,5 +23,14 @@ public class KookCommands {
             .setHelpContent("用法: /info ; 或者 /单子")
             .executesUser(new InfoCommand())
             .addAlias("单子");
+        dict = new JKookCommand("dict","/").setDescription("查看物品名映射表")
+            .setHelpContent("用法: /dict")
+            .executesUser(new QueryDictionaryCommand())
+            .addAlias("字典");
+        dict_upload = new JKookCommand("dictUpload","/").setDescription("上传映射")
+            .setHelpContent("用法:/dictUpload 映射值 !原物品名! (原物品名必须用感叹号包围)")
+            .executesUser(new UploadDictionaryCommand())
+            .addAlias("dp")
+            .addAlias("字典上传");
     }
 }

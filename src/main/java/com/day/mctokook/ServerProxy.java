@@ -83,6 +83,8 @@ public class ServerProxy extends CommonProxy {
         commandManager.registerCommand(plugin, commands.list);
         commandManager.registerCommand(plugin, commands.info);
         commandManager.registerCommand(plugin, commands.order);
+        commandManager.registerCommand(plugin, commands.dict_upload);
+        commandManager.registerCommand(plugin, commands.dict);
         // ClientCommandHandler.instance.registerCommand(new SetProxyCommand());
     }
 

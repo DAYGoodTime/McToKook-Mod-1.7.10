@@ -25,6 +25,7 @@ public class Config {
     public static String CPU_TASK_API = "http://localhost:125/api/ae/cpu/info/";
     public static String ITEM_API = "http://localhost:125/api/ae/item/";
     public static String AE_ORDER_ITEM_API = "http://localhost:125/api/ae/order/";
+    public static String LABEL_DICTION_API = "http://localhost:125/maintain/dict";
 
     public static Boolean to_Minecraft = true;
 
