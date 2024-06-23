@@ -95,18 +95,18 @@ public class InfoCommand implements UserCommandExecutor {
                     item.size = -1L;
                 }
                 // 名称转换
-                String name = item.label;
-                if (name.contains("液滴") || name.contains("drop of")) name = "___液滴";
-                if (name.contains("/t")) name = name.replaceAll("/", "_");
-                String url = URLEncodeUtil.encode(StrUtil.format(Config.ITEM_API + "{}/{}", item.damage, name));
+                String itemName = item.label;
+                if (itemName.contains("液滴") || itemName.contains("drop of")) itemName = "___液滴";
+                if (itemName.contains("/t")) itemName = itemName.replaceAll("/", "_");
+                String url = URLEncodeUtil.encode(StrUtil.format(Config.ITEM_API + "{}/{}", item.damage, itemName));
                 byte[] bytes = HttpUtil.downloadBytes(url);
                 // 物品图片上传至Kook
                 String ItemImageKookUrl = McToKook.kbcClient.getCore()
                     .getHttpAPI()
-                    .uploadFile(name, bytes);
+                    .uploadFile(item.label, bytes);
                 images.add(ItemImageKookUrl);
                 // 渲染label为图片
-                byte[] LabelImageByte = renderText(name);
+                byte[] LabelImageByte = renderText(item.label);
                 item.labelImage = McToKook.kbcClient.getCore()
                     .getHttpAPI()
                     .uploadFile(String.valueOf(Math.random()), LabelImageByte);
