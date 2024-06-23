@@ -17,7 +17,7 @@ import snw.jkook.entity.User;
 import snw.jkook.event.EventHandler;
 import snw.jkook.event.Listener;
 import snw.jkook.event.channel.ChannelMessageEvent;
-import snw.jkook.message.TextChannelMessage;
+import snw.jkook.message.ChannelMessage;
 import snw.jkook.message.component.BaseComponent;
 import snw.jkook.message.component.TextComponent;
 
@@ -38,7 +38,7 @@ public class KookListener implements Listener {
         }
 
         User kookUser = null;
-        TextChannelMessage kookMessage = null;
+        ChannelMessage kookMessage = null;
 
         if (channelMessageEvent.getChannel()
             .getId()

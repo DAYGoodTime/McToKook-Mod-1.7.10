@@ -2,4 +2,8 @@
 
 repositories {
     mavenLocal()
+    maven { url 'https://jitpack.io' }
+    maven { url 'https://maven.fabricmc.net/' }
+    maven { url 'https://maven.architectury.dev/' }
+    maven { url 'https://repo.panda-lang.org/releases' }
 }
