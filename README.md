@@ -7,6 +7,7 @@
 
 ## Mod的食用方法
 将mod添加至服务端的mods文件夹中并启动服务端 \
+mixin分支 还需要安装unimixins \
 注意，首次添加启动会使服务端直接关闭并且告知原因 \
 然后您应该到config文件夹中寻找 mctokook.cfg 文件 \
 打开并且填写里面的必要配置项目 bot_token 与 channel_ID \
@@ -37,7 +38,9 @@
 ## 最后
 还有什么问题、想法或建议，请直接与我联系，或者直接在github上开一个issues。
 ## 该分支的私货[minix]
-监听时间改成 Minix了 需要用Gtnh的uniminix才可以运行
-添加了在Kook端添加了 `/单子` 和 `/下单` 命令 需要 搭配[OCRemoteServer](https://github.com/DAYGoodTime/OCRemote)运行。
-
+玩家进出服务器事件改成Minix方式进行监听。(Forge的事件容易遗留) \
+这导致需要用GTNH的unimixin才可以运行
+添加了在Kook端添加了 `/单子` 和 `/下单` 等命令。可以用来远程查看家里AE合成的情况 \
+需要搭配[OCRemoteServer](https://github.com/DAYGoodTime/OCRemote)运行。
+(当然，你可以自己实现后端,相关接口API会在配置文件当中)
 
