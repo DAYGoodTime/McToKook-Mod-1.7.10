@@ -33,7 +33,7 @@ public class KookCommands {
             .executesUser(new UploadDictionaryCommand())
             .addAlias("dp")
             .addAlias("字典上传");
-        sync = new JKookCommand("sync","/").setDescription("同步代码")
+        sync = new JKookCommand("sync", "/").setDescription("同步代码")
             .setHelpContent("用法: /sync")
             .executesUser(new SyncRemoteCodeCommand());
     }

@@ -6,7 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
+import net.minecraftforge.client.ClientCommandHandler;
+
 import com.day.mctokook.commands.kook.KookCommands;
+import com.day.mctokook.commands.mc.ReInitCommand;
 import com.day.mctokook.listener.KookListener;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -34,6 +37,7 @@ public class ServerProxy extends CommonProxy {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
         McToKook.LOG.info(Config.configList());
         McToKook.LOG.info("Hello Forge! Here is McToKooK 1710");
+        McToKook.instance = modInstance;
         // emojiHandler = new EmojiHandler(this);
         if (!configFolder.exists()) {
             configFolder.mkdir();
@@ -62,14 +66,19 @@ public class ServerProxy extends CommonProxy {
                 throw new Error("你没有提供channel ID或channel ID不正确,McToKook-Mod将会停用,服务端即将崩溃");
             }
         }
+        connectKBC(core, config, bot_token, modInstance, channel_ID);
 
+        ClientCommandHandler.instance.registerCommand(new ReInitCommand());
+    }
+
+    public static void connectKBC(CoreImpl core, YamlConfiguration config, String bot_token, McToKook modInstance,
+        String channel_ID) {
         McToKook.kbcClient = new KBCClient(core, config, null, bot_token);
 
         McToKook.kbcClient.start();
         TextChannel channel = (TextChannel) McToKook.kbcClient.getCore()
             .getHttpAPI()
             .getChannel(channel_ID);
-
         // 注册KOOK消息监听器
         // 夏夜说: 不要用InternalPlugin,但是我摆了！
         McToKook.kbcClient.getCore()
@@ -85,7 +94,7 @@ public class ServerProxy extends CommonProxy {
         commandManager.registerCommand(plugin, commands.order);
         commandManager.registerCommand(plugin, commands.dict_upload);
         commandManager.registerCommand(plugin, commands.dict);
-        // ClientCommandHandler.instance.registerCommand(new SetProxyCommand());
+        commandManager.registerCommand(plugin, commands.sync);
     }
 
     // register server commands in this event handler (Remove if not needed)

@@ -32,6 +32,7 @@ public class McToKook {
     public static final Logger LOG = LogManager.getLogger(McToKook.MODID);
 
     public static KBCClient kbcClient = null;
+    public static McToKook instance = null;
 
     public static Map<String, Long> playerOnlineTime;
 

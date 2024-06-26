@@ -88,14 +88,12 @@ public class Config {
             .getString("CPU_INFO_API", Configuration.CATEGORY_GENERAL, CPU_INFO_API, "自义定获取CPU信息API地址");
         CPU_TASK_API = configuration
             .getString("CPU_TASK_API", Configuration.CATEGORY_GENERAL, CPU_TASK_API, "自义定获取CPU TASK API地址");
-        ITEM_API = configuration
-            .getString("ITEM_API", Configuration.CATEGORY_GENERAL, ITEM_API, "自义定获取物品图片 API地址");
+        ITEM_API = configuration.getString("ITEM_API", Configuration.CATEGORY_GENERAL, ITEM_API, "自义定获取物品图片 API地址");
         AE_ORDER_ITEM_API = configuration
             .getString("AE_ORDER_ITEM_API", Configuration.CATEGORY_GENERAL, AE_ORDER_ITEM_API, "自义定AE下单接口 API地址");
         LABEL_DICTION_API = configuration
             .getString("LABEL_DICTION_API", Configuration.CATEGORY_GENERAL, LABEL_DICTION_API, "自义定 名称映射 API地址");
-        SYNC_API = configuration
-            .getString("SYNC_API", Configuration.CATEGORY_GENERAL, SYNC_API, "自义定同步OC代码 API地址");
+        SYNC_API = configuration.getString("SYNC_API", Configuration.CATEGORY_GENERAL, SYNC_API, "自义定同步OC代码 API地址");
         if (configuration.hasChanged()) {
             configuration.save();
         }

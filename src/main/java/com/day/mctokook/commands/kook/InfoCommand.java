@@ -61,10 +61,6 @@ public class InfoCommand implements UserCommandExecutor {
                 message.reply("无法获取到ae信息,请确认lua执行状态和后端状态");
                 return;
             }
-            Channel channel = McToKook.kbcClient.getCore()
-                .getHttpAPI()
-                .getChannel(Config.channel_ID);
-            if (!(channel instanceof TextChannel)) return;
             builder.setSize(Size.LG)
                 .addModule(new HeaderModule(new PlainTextElement("单子情况: ")))
                 .addModule(DividerModule.INSTANCE)
@@ -134,7 +130,7 @@ public class InfoCommand implements UserCommandExecutor {
                 }
             }
             card = builder.build();
-            ((TextChannel) channel).sendComponent(card);
+            message.reply(card);
         } catch (BadResponseException e) {
             message.reply("KOOK消息异常:" + e.getLocalizedMessage());
             if (card != null) {
@@ -151,7 +147,6 @@ public class InfoCommand implements UserCommandExecutor {
             McToKook.LOG.error("内部错误:{}", e.getLocalizedMessage(), e);
         }
     }
-
     private byte[] renderText(String text) throws IOException {
         Font font = new Font("微软雅黑", Font.PLAIN, 24);
         int width = 360;
@@ -167,8 +162,9 @@ public class InfoCommand implements UserCommandExecutor {
         g2d.setColor(Color.WHITE);
         FontMetrics fm = g2d.getFontMetrics();
         int rawWidth = fm.stringWidth(text);
-        if (rawWidth + 20 < width) {
-            image = new BufferedImage(rawWidth + 10, height, BufferedImage.TYPE_INT_ARGB);
+        int fontHeight = fm.getHeight();
+        if (rawWidth + 20 > width || fontHeight + 10 > height) {
+            image = new BufferedImage(rawWidth + 10, fontHeight+10, BufferedImage.TYPE_INT_ARGB);
             g2d = image.createGraphics();
             g2d.setFont(font);
             g2d.setColor(Color.WHITE);
@@ -179,21 +175,7 @@ public class InfoCommand implements UserCommandExecutor {
             // 设置回原设置
             g2d.setComposite(AlphaComposite.SrcOver);
         }
-        StringBuffer line = new StringBuffer();
-        int x = 5;
-        int y = 24;
-        for (int i = 0; i < text.length(); i++) {
-            char c = text.charAt(i);
-            String word = String.valueOf(c);
-            if (fm.stringWidth(word + line) < 340) {
-                line.append(word);
-            } else {
-                g2d.drawString(line.toString(), x, y);
-                y += fm.getHeight() + 1;
-                line = new StringBuffer(word);
-            }
-        }
-        g2d.drawString(line.toString(), x, y);
+        g2d.drawString(text, 0, fontHeight+5);
         g2d.dispose();
         try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
             ImageIO.write(image, "png", bos);
