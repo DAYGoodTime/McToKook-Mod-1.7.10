@@ -1,14 +1,12 @@
 package com.day.mctokook.commands.kook;
 
-import java.util.List;
-
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
-import org.jetbrains.annotations.Nullable;
-
-import snw.jkook.command.UserCommandExecutor;
-import snw.jkook.entity.User;
+import dev.rollczi.litecommands.annotations.command.Command;
+import dev.rollczi.litecommands.annotations.context.Context;
+import dev.rollczi.litecommands.annotations.description.Description;
+import dev.rollczi.litecommands.annotations.execute.Execute;
 import snw.jkook.entity.abilities.Accessory;
 import snw.jkook.message.Message;
 import snw.jkook.message.component.card.CardBuilder;
@@ -20,16 +18,19 @@ import snw.jkook.message.component.card.element.PlainTextElement;
 import snw.jkook.message.component.card.module.DividerModule;
 import snw.jkook.message.component.card.module.HeaderModule;
 import snw.jkook.message.component.card.module.SectionModule;
+import snw.kookbc.impl.command.litecommands.annotations.prefix.Prefix;
 import snw.kookbc.impl.network.exceptions.BadResponseException;
 
-public class ListCommand implements UserCommandExecutor {
+@Command(name = "玩家列表", aliases = { "列表", "list" })
+@Prefix("/")
+@Description("查询当前服务器在线玩家")
+public class List {
 
-    @Override
-    public void onCommand(User user, Object[] objects, @Nullable Message message) {
+    @Execute
+    public void list(@Context Message message) {
         try {
-            if (message == null) return;
             StringBuilder players = new StringBuilder();
-            List<EntityPlayerMP> playerList = MinecraftServer.getServer()
+            java.util.List<EntityPlayerMP> playerList = MinecraftServer.getServer()
                 .getConfigurationManager().playerEntityList;
             playerList.forEach(
                 p -> players.append(p.getDisplayName())

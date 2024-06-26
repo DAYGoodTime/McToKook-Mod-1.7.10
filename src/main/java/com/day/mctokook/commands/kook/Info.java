@@ -14,8 +14,6 @@ import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 
-import org.jetbrains.annotations.Nullable;
-
 import com.day.mctokook.Config;
 import com.day.mctokook.McToKook;
 import com.day.mctokook.modules.ae.AEHelper;
@@ -27,11 +25,11 @@ import com.day.mctokook.utils.NumberFormatter;
 import cn.hutool.core.net.URLEncodeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
-import snw.jkook.command.UserCommandExecutor;
-import snw.jkook.entity.User;
+import dev.rollczi.litecommands.annotations.command.Command;
+import dev.rollczi.litecommands.annotations.context.Context;
+import dev.rollczi.litecommands.annotations.description.Description;
+import dev.rollczi.litecommands.annotations.execute.Execute;
 import snw.jkook.entity.abilities.Accessory;
-import snw.jkook.entity.channel.Channel;
-import snw.jkook.entity.channel.TextChannel;
 import snw.jkook.message.Message;
 import snw.jkook.message.component.card.CardBuilder;
 import snw.jkook.message.component.card.MultipleCardComponent;
@@ -45,13 +43,17 @@ import snw.jkook.message.component.card.module.ContextModule;
 import snw.jkook.message.component.card.module.DividerModule;
 import snw.jkook.message.component.card.module.HeaderModule;
 import snw.jkook.message.component.card.module.SectionModule;
+import snw.kookbc.impl.command.litecommands.annotations.prefix.Prefix;
 import snw.kookbc.impl.network.exceptions.BadResponseException;
 import snw.kookbc.util.GsonUtil;
 
-public class InfoCommand implements UserCommandExecutor {
+@Command(name = "AE菜单", aliases = { "单子", "info" })
+@Prefix("/")
+@Description("查看AE合成信息")
+public class Info {
 
-    @Override
-    public void onCommand(User user, Object[] arguments, @Nullable Message message) {
+    @Execute
+    public void info(@Context Message message) {
         MultipleCardComponent card = null;
         CardBuilder builder = new CardBuilder().setTheme(Theme.INFO);
         try {
@@ -147,6 +149,7 @@ public class InfoCommand implements UserCommandExecutor {
             McToKook.LOG.error("内部错误:{}", e.getLocalizedMessage(), e);
         }
     }
+
     private byte[] renderText(String text) throws IOException {
         Font font = new Font("微软雅黑", Font.PLAIN, 24);
         int width = 360;
@@ -164,7 +167,7 @@ public class InfoCommand implements UserCommandExecutor {
         int rawWidth = fm.stringWidth(text);
         int fontHeight = fm.getHeight();
         if (rawWidth + 20 > width || fontHeight + 10 > height) {
-            image = new BufferedImage(rawWidth + 10, fontHeight+10, BufferedImage.TYPE_INT_ARGB);
+            image = new BufferedImage(rawWidth + 10, fontHeight + 5, BufferedImage.TYPE_INT_ARGB);
             g2d = image.createGraphics();
             g2d.setFont(font);
             g2d.setColor(Color.WHITE);
@@ -175,7 +178,7 @@ public class InfoCommand implements UserCommandExecutor {
             // 设置回原设置
             g2d.setComposite(AlphaComposite.SrcOver);
         }
-        g2d.drawString(text, 0, fontHeight+5);
+        g2d.drawString(text, 0, fontHeight - 5);
         g2d.dispose();
         try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
             ImageIO.write(image, "png", bos);
