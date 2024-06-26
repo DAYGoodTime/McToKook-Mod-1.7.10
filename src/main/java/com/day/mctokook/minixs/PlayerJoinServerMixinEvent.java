@@ -101,9 +101,14 @@ public class PlayerJoinServerMixinEvent {
         if (isQuited) {
             long loginTime = 0L;
             if (McToKook.playerOnlineTime.containsKey(playerUUID)) {
-                loginTime = McToKook.playerOnlineTime.get(playerUUID);
+                loginTime = McToKook.playerOnlineTime.getOrDefault(playerUUID, -1L);
             }
             long playingTime = (System.currentTimeMillis() - loginTime) / 60000;
+            // 尚不清楚超大值是怎么来的
+            if (playingTime > 10000L) {
+                McToKook.LOG.warn("异常的时间长度,登录时间搓:" + loginTime);
+                playingTime = -1;
+            }
             if (playingTime > 0) {
                 formattedMessage.append(" 游玩时长:")
                     .append(playingTime)

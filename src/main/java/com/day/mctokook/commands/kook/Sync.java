@@ -1,20 +1,23 @@
 package com.day.mctokook.commands.kook;
 
-import org.jetbrains.annotations.Nullable;
-
 import com.day.mctokook.Config;
 import com.day.mctokook.McToKook;
 
 import cn.hutool.http.HttpUtil;
-import snw.jkook.command.UserCommandExecutor;
-import snw.jkook.entity.User;
+import dev.rollczi.litecommands.annotations.command.Command;
+import dev.rollczi.litecommands.annotations.context.Context;
+import dev.rollczi.litecommands.annotations.description.Description;
+import dev.rollczi.litecommands.annotations.execute.Execute;
 import snw.jkook.message.Message;
+import snw.kookbc.impl.command.litecommands.annotations.prefix.Prefix;
 
-public class SyncRemoteCodeCommand implements UserCommandExecutor {
+@Command(name = "sync", aliases = { "同步代码" })
+@Prefix("/")
+@Description("更新OC代码")
+public class Sync {
 
-    @Override
-    public void onCommand(User user, Object[] objects, @Nullable Message message) {
-        if (message == null) return;
+    @Execute
+    public void sync(@Context Message message) {
         try {
             String response = HttpUtil.get(Config.SYNC_API);
             if (Boolean.parseBoolean(response)) {

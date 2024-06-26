@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 import net.minecraftforge.client.ClientCommandHandler;
 
-import com.day.mctokook.commands.kook.KookCommands;
+import com.day.mctokook.commands.kook.CommandInit;
 import com.day.mctokook.commands.mc.ReInitCommand;
 import com.day.mctokook.listener.KookListener;
 
@@ -16,7 +16,6 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import snw.jkook.JKook;
-import snw.jkook.command.CommandManager;
 import snw.jkook.config.file.YamlConfiguration;
 import snw.jkook.entity.channel.TextChannel;
 import snw.kookbc.impl.CoreImpl;
@@ -85,16 +84,8 @@ public class ServerProxy extends CommonProxy {
             .getEventManager()
             .registerHandlers(McToKook.kbcClient.getInternalPlugin(), new KookListener(modInstance));
         // 注册KOOK指令
-        CommandManager commandManager = McToKook.kbcClient.getCore()
-            .getCommandManager();
         InternalPlugin plugin = McToKook.kbcClient.getInternalPlugin();
-        KookCommands commands = new KookCommands();
-        commandManager.registerCommand(plugin, commands.list);
-        commandManager.registerCommand(plugin, commands.info);
-        commandManager.registerCommand(plugin, commands.order);
-        commandManager.registerCommand(plugin, commands.dict_upload);
-        commandManager.registerCommand(plugin, commands.dict);
-        commandManager.registerCommand(plugin, commands.sync);
+        CommandInit.InitKookCommand(plugin);
     }
 
     // register server commands in this event handler (Remove if not needed)
