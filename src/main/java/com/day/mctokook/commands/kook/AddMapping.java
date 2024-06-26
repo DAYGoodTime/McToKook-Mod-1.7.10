@@ -1,5 +1,6 @@
 package com.day.mctokook.commands.kook;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +15,13 @@ import dev.rollczi.litecommands.annotations.description.Description;
 import dev.rollczi.litecommands.annotations.execute.Execute;
 import dev.rollczi.litecommands.annotations.quoted.Quoted;
 import snw.jkook.message.Message;
+import snw.jkook.message.component.card.CardBuilder;
+import snw.jkook.message.component.card.Size;
+import snw.jkook.message.component.card.Theme;
+import snw.jkook.message.component.card.element.PlainTextElement;
+import snw.jkook.message.component.card.module.DividerModule;
+import snw.jkook.message.component.card.module.HeaderModule;
+import snw.jkook.message.component.card.module.SectionModule;
 import snw.kookbc.impl.command.litecommands.annotations.prefix.Prefix;
 
 @Command(name = "添加映射", aliases = { "am", "addMap" })
@@ -22,14 +30,26 @@ import snw.kookbc.impl.command.litecommands.annotations.prefix.Prefix;
 public class AddMapping {
 
     @Execute
-    public void addMapping(@Context Message message, @Arg @Quoted String[] args) {
+    public void addMapping(@Context Message message, @Arg("words") @Quoted String[] args) {
         try {
             if (args.length != 2) {
-                message.reply("参数错误");
+                CardBuilder builder = new CardBuilder();
+                builder.setTheme(Theme.DANGER)
+                    .setSize(Size.LG);
+                builder.addModule(new HeaderModule("参数错误,参数个数:" + args.length));
+                builder.addModule(DividerModule.INSTANCE);
+                StringBuilder sb = new StringBuilder("输入:");
+                Arrays.stream(args)
+                    .forEach(
+                        s -> sb.append(s)
+                            .append("---"));
+                builder.addModule(new SectionModule(new PlainTextElement(sb.toString())));
+                message.reply(builder.build());
                 return;
             }
             Map<String, Object> params = new HashMap<>();
-            params.put(args[0], args[1]);
+            params.put("name", args[0]);
+            params.put("value", args[1]);
             String response = HttpUtil.post(Config.LABEL_DICTION_API + "/upload", params);
             boolean success = Boolean.parseBoolean(response);
             if (success) {
@@ -38,7 +58,7 @@ public class AddMapping {
                 message.reply("添加失败,可能该字典已被添加");
             }
         } catch (Throwable e) {
-            message.reply("插件内部异常:{}" + e.getLocalizedMessage());
+            message.reply("插件内部异常:" + e.getLocalizedMessage());
             McToKook.LOG.error("插件内部异常:{}", e.getLocalizedMessage(), e);
         }
     }

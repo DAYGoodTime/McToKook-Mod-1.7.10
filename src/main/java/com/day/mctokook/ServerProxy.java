@@ -122,7 +122,7 @@ public class ServerProxy extends CommonProxy {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            McToKook.LOG.error("保存配置文件失败:{}", e.getLocalizedMessage(), e);
         }
     }
 }

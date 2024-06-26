@@ -45,8 +45,7 @@ public class Dict {
             for (Map.Entry<String, Object> entry : result.entrySet()) {
                 builder.addModule(
                     new SectionModule(
-                        new MarkdownElement(
-                            (StrUtil.format("源:{} 映射后:{}", entry.getKey(), (String) entry.getValue())))));
+                        new MarkdownElement((StrUtil.format("源:{} 映射后:{}", entry.getKey(), entry.getValue())))));
                 builder.addModule(DividerModule.INSTANCE);
             }
             message.reply(builder.build());
@@ -54,7 +53,7 @@ public class Dict {
             message.reply("kook消息发送失败:" + e.getLocalizedMessage());
             McToKook.LOG.warn("kook消息发送失败:{},消息内容{}", e.getLocalizedMessage(), e);
         } catch (Throwable e) {
-            message.reply("插件内部异常:{}" + e.getLocalizedMessage());
+            message.reply("插件内部异常:" + e.getLocalizedMessage());
             McToKook.LOG.error("插件内部异常:{}", e.getLocalizedMessage(), e);
         }
     }
