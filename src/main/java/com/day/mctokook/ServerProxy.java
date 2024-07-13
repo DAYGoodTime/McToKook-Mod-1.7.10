@@ -1,26 +1,26 @@
 package com.day.mctokook;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-
-import net.minecraftforge.client.ClientCommandHandler;
-
 import com.day.mctokook.commands.kook.CommandInit;
 import com.day.mctokook.commands.mc.ReInitCommand;
 import com.day.mctokook.listener.KookListener;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import net.minecraft.command.ICommandManager;
+import net.minecraft.command.ServerCommandManager;
+import net.minecraft.server.MinecraftServer;
 import snw.jkook.JKook;
 import snw.jkook.config.file.YamlConfiguration;
 import snw.jkook.entity.channel.TextChannel;
 import snw.kookbc.impl.CoreImpl;
 import snw.kookbc.impl.KBCClient;
 import snw.kookbc.impl.plugin.InternalPlugin;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
 
 public class ServerProxy extends CommonProxy {
 
@@ -66,8 +66,17 @@ public class ServerProxy extends CommonProxy {
             }
         }
         connectKBC(core, config, bot_token, modInstance, channel_ID);
-
-        ClientCommandHandler.instance.registerCommand(new ReInitCommand());
+        //registry server command
+        MinecraftServer server = MinecraftServer.getServer();
+        if (server == null || server.getCommandManager()==null) {
+            McToKook.LOG.error("无法注册命名，是否在服务端环境内?");
+            return;
+        }
+        ICommandManager cm = server.getCommandManager();
+        if(cm instanceof ServerCommandManager) {
+            ServerCommandManager scm = (ServerCommandManager)cm;
+            scm.registerCommand(new ReInitCommand());
+        }
     }
 
     public static void connectKBC(CoreImpl core, YamlConfiguration config, String bot_token, McToKook modInstance,
@@ -75,6 +84,7 @@ public class ServerProxy extends CommonProxy {
         McToKook.kbcClient = new KBCClient(core, config, null, bot_token);
 
         McToKook.kbcClient.start();
+        //主动尝试获取channel,如果任何
         TextChannel channel = (TextChannel) McToKook.kbcClient.getCore()
             .getHttpAPI()
             .getChannel(channel_ID);
@@ -113,7 +123,6 @@ public class ServerProxy extends CommonProxy {
             }
             // noinspection ResultOfMethodCallIgnored
             kbcSetting.createNewFile();
-
             try (final FileOutputStream out = new FileOutputStream(kbcSetting)) {
                 int index;
                 byte[] bytes = new byte[1024];
