@@ -35,16 +35,12 @@
  */
 dependencies {
     runtimeOnlyNonPublishable("com.github.GTNewHorizons:NotEnoughItems:2.5.4-GTNH:dev")
-    //internal kookbc which is highly modify,only use in this case
-//    shadowImplementation ('snw:kookbc:0.27.2.1-modify'){
-//        exclude group: 'org.apache.logging.log4j', module: 'log4j-core'
-//        exclude group: 'org.apache.logging.log4j', module: 'log4j-api'
-//        exclude group: 'org.apache.logging.log4j', module: 'slf4j-impl'
-//        exclude group: 'org.apache.logging.log4j', module: 'slf4j-impl'
-//        exclude group: 'org.slf4j', module: 'slf4j-api'
-//    }
     shadowImplementation ('com.github.SNWCreations:KookBC:0.30.2'){
         exclude group: 'net.fabricmc',module: 'sponge-mixin'
     }
-    shadowImplementation 'cn.hutool:hutool-all:5.8.27'
+    shadowImplementation 'cn.hutool:hutool-core:5.8.28'
+    shadowImplementation 'cn.hutool:hutool-http:5.8.28'
+    shadowImplementation 'cn.hutool:hutool-json:5.8.28'
+    shadowImplementation 'ch.qos.logback:logback-classic:1.5.6'
+    shadowImplementation 'ch.qos.logback:logback-core:1.5.6'
 }
