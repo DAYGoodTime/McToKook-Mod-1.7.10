@@ -79,7 +79,7 @@ public class Config {
     }
 
     // only for DEV
-    public static String configList() {
+    protected static String configList() {
         Class<Config> cfg = Config.class;
         return Arrays.stream(cfg.getDeclaredFields())
             .map(Field::getName)

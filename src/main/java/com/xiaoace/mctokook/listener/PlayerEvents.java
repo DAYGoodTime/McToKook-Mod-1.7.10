@@ -91,7 +91,7 @@ public class PlayerEvents {
         if (isQuited) {
             Long loginTime = MapUtil.getLong(McToKook.playerOnlineTime, playerUUID, 0L);
             long playingTime = (System.currentTimeMillis() - loginTime) / 60000;
-            if (playingTime>0) {
+            if (playingTime > 0) {
                 formattedMessage.append(" 游玩时长:")
                     .append(playingTime)
                     .append("分钟");

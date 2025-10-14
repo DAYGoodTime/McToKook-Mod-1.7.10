@@ -1,12 +1,15 @@
-package com.xiaoace.mctokook.commands;
-
-import java.util.List;
+package com.xiaoace.mctokook.commands.kook;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
-import snw.jkook.command.JKookCommand;
+import dev.rollczi.litecommands.annotations.command.Command;
+import dev.rollczi.litecommands.annotations.context.Context;
+import dev.rollczi.litecommands.annotations.description.Description;
+import dev.rollczi.litecommands.annotations.execute.Execute;
 import snw.jkook.entity.abilities.Accessory;
+import snw.jkook.exceptions.BadResponseException;
+import snw.jkook.message.Message;
 import snw.jkook.message.component.card.CardBuilder;
 import snw.jkook.message.component.card.MultipleCardComponent;
 import snw.jkook.message.component.card.Size;
@@ -16,20 +19,22 @@ import snw.jkook.message.component.card.element.PlainTextElement;
 import snw.jkook.message.component.card.module.DividerModule;
 import snw.jkook.message.component.card.module.HeaderModule;
 import snw.jkook.message.component.card.module.SectionModule;
+import snw.kookbc.impl.command.litecommands.annotations.prefix.Prefix;
 
-public class KookCommands {
+@Command(name = "玩家列表", aliases = { "列表", "list" })
+@Prefix("/")
+@Description("查询当前服务器在线玩家")
+public class List {
 
-    public JKookCommand list = new JKookCommand("list", "/").setDescription("用法: /list ; 作用: 返回当前服务器内的玩家列表")
-        .setHelpContent("用法: /list ; 作用: 返回当前服务器内的玩家列表")
-        .executesUser(((sender, arguments, message) -> {
-
+    @Execute
+    public void list(@Context Message message) {
+        try {
             StringBuilder players = new StringBuilder();
-            List<EntityPlayerMP> playerList = MinecraftServer.getServer()
+            java.util.List<EntityPlayerMP> playerList = MinecraftServer.getServer()
                 .getConfigurationManager().playerEntityList;
             playerList.forEach(
                 p -> players.append(p.getDisplayName())
                     .append(" "));
-
             MultipleCardComponent playerListCard = new CardBuilder().setTheme(Theme.SUCCESS)
                 .setSize(Size.LG)
                 .addModule(new HeaderModule(new PlainTextElement("在线玩家列表: ")))
@@ -37,6 +42,8 @@ public class KookCommands {
                 .addModule(new SectionModule(new MarkdownElement(players.toString()), null, Accessory.Mode.LEFT))
                 .build();
             message.reply(playerListCard);
-        }));
-
+        } catch (BadResponseException e) {
+            message.reply("KOOK消息异常:" + e.getLocalizedMessage());
+        }
+    }
 }

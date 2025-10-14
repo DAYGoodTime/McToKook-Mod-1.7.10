@@ -34,8 +34,9 @@
  * For more details, see https://docs.gradle.org/8.0.1/userguide/java_library_plugin.html#sec:java_library_configurations_graph
  */
 dependencies {
-    shadowImplementation 'com.github.SNWCreations:Kookbc:0.26.13',{
-        exclude group: 'net.fabricmc' ,module: 'sponge-mixin'
+    //runtimeOnlyNonPublishable("com.github.GTNewHorizons:NotEnoughItems:2.7.69-GTNH:dev")
+    shadowImplementation ('com.github.SNWCreations:KookBC:0.32.2'){
+        exclude group: 'net.fabricmc',module: 'sponge-mixin'
     }
-    shadowImplementation 'cn.hutool:hutool-all:5.8.18'
+    shadowImplementation 'cn.hutool:hutool-core:5.8.28'
 }
