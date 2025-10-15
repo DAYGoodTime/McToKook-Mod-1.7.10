@@ -37,6 +37,7 @@ dependencies {
     //runtimeOnlyNonPublishable("com.github.GTNewHorizons:NotEnoughItems:2.7.69-GTNH:dev")
     shadowImplementation ('com.github.SNWCreations:KookBC:0.32.2'){
         exclude group: 'net.fabricmc',module: 'sponge-mixin'
+        exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl'
     }
     shadowImplementation 'cn.hutool:hutool-core:5.8.28'
 }
